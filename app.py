@@ -1,17 +1,17 @@
-from flask import Flask, request
+from flask import (Flask, request)
+from mastermind.response import get_response
 import telegram
-from telebot.credentials import bot_token, bot_user_name,URL
-from telebot.mastermind import get_response
 
+TOKEN = '1606387832:AAFtuOGfvPw-8ah0F8MWWPB802oLy0MrJzE'
 
-global bot
-global TOKEN
-TOKEN = bot_token
+URL = "https://hu-english-battle-bot.herokuapp.com/"
+
 bot = telegram.Bot(token=TOKEN)
 
 app = Flask(__name__)
 
-@app.route('/{TOKEN}'.format(TOKEN), methods=['POST'])
+
+@app.route('/1606387832:AAFtuOGfvPw-8ah0F8MWWPB802oLy0MrJzE'.format(TOKEN), methods=['POST'])
 def respond():
     # retrieve the message in JSON and then transform it to Telegram object
     update = telegram.Update.de_json(request.get_json(force=True), bot)
@@ -28,6 +28,7 @@ def respond():
 
     return 'ok'
 
+
 @app.route('/setwebhook', methods=['GET', 'POST'])
 def set_webhook():
     s = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
@@ -37,8 +38,9 @@ def set_webhook():
         return "webhook setup failed"
 
 @app.route('/')
-def index():
-    return '.'
+def home():
+    print(bot.get_me())
+    return 'hello'
 
 
 if __name__ == '__main__':
