@@ -1,5 +1,6 @@
 from flask import (Flask, request)
 from mastermind.response import get_response
+from templates.welcome import welcome_msg
 import telegram
 import os
 from dotenv import load_dotenv
@@ -14,32 +15,48 @@ app = Flask(__name__)
 
 
 
-@app.route('/{}'.format(TOKEN), methods=['POST'])
+@app.route('/{}'.format(TOKEN), methods=['POST', 'GET'])
 def respond():
+
     # retrieve the message in JSON and then transform it to Telegram object
-    update = telegram.Update.de_json(request.get_json(force=True), bot)
-  
+    if request.get_json(force=True)['update_id']:
+        update = telegram.Update.de_json(request.get_json(force=True), bot)
+       
+
     # Telegram understands UTF-8, so encode text for unicode compatibility
-    print(update)
-    if(update.message and update.message.text and update.message.chat.id and update.message.message_id):
-        print('reaching')
-        chat_id = update.message.chat.id
-        msg_id = update.message.message_id
-        text = update.message.text.encode('utf-8').decode()
-        print("got text message :", text)
+    # print(update)
+        if update.message:
+            if update.message.text and update.message.chat.id and update.message.message_id:
+                chat_id = update.message.chat.id
+                msg_id = update.message.message_id
+                text = update.message.text.encode('utf-8').decode()
+                print("got text message :", text)
         
         
-        if text[0] == '/':
-            response = get_response(text)
-            bot.sendMessage(chat_id=chat_id, text=response, reply_to_message_id=msg_id)
-    else:
-        print('no message so far... still listening...')
-    return 'ok'
+                if text[0] == '/':
+                    response = get_response(text)
+                    bot.sendMessage(chat_id=chat_id, text=response, reply_to_message_id=msg_id)
+                else:
+               
+                    print('does not start with /.')
+            if update.message.new_chat_members is not None and len(update.message.new_chat_members) != 0: 
+                chat_id = update.message.chat.id
+                for members in update.message.new_chat_members:
+                    if members.username == 'HUEnglishBattle_bot':
+                        bot.sendMessage(chat_id=chat_id, text=welcome_msg(), parse_mode='HTML')
+                        print('breaking loop...')
+                        break
+
+            else:
+                print(update)
+                print('no message so far... still listening...')
+        return 'ok'
 
 
 @app.route('/setwebhook', methods=['GET', 'POST'])
 def set_webhook():
     s = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
+    print('reaching here')
     if s:
         return "webhook setup ok"
     else:
