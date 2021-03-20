@@ -14,14 +14,12 @@ bot = telegram.Bot(token=TOKEN)
 app = Flask(__name__)
 
 
-
 @app.route('/{}'.format(TOKEN), methods=['POST', 'GET'])
 def respond():
 
     # retrieve the message in JSON and then transform it to Telegram object
     if request.get_json(force=True)['update_id']:
         update = telegram.Update.de_json(request.get_json(force=True), bot)
-       
 
     # Telegram understands UTF-8, so encode text for unicode compatibility
     # print(update)
@@ -30,26 +28,30 @@ def respond():
                 chat_id = update.message.chat.id
                 msg_id = update.message.message_id
                 option = update.message.text.encode('utf-8').decode()
-                print("got text message :", text)
-        
+
+                print("got text message :", option)
         
                 if option[0] == '/':
-                    response = commands_init(option)
+                    response = commands_init(update, option)
                     bot.sendMessage(chat_id=chat_id, text=response, reply_to_message_id=msg_id)
                 else:
-               ]
                     print('does not start with /.')
+
             if update.message.new_chat_members is not None and len(update.message.new_chat_members) != 0: 
+
                 chat_id = update.message.chat.id
+
                 for members in update.message.new_chat_members:
                     if members.username == 'HUEnglishBattle_bot':
                         bot.sendMessage(chat_id=chat_id, text=welcome_msg(), parse_mode='HTML')
                         print('breaking loop...')
+
                         break
 
             else:
                 print(update)
                 print('no message so far... still listening...')
+
         return 'ok'
 
 
@@ -57,6 +59,7 @@ def respond():
 def set_webhook():
     s = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
     print('reaching here')
+
     if s:
         return "webhook setup ok"
     else:
@@ -65,6 +68,7 @@ def set_webhook():
 @app.route('/')
 def home():
     print(bot.get_me())
+
     return 'hello'
 
 
