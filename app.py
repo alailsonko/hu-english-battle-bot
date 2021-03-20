@@ -1,5 +1,5 @@
 from flask import (Flask, request)
-from mastermind.response import get_response
+from commands.manage_commands import commands_init
 from templates.welcome import welcome_msg
 import telegram
 import os
@@ -29,15 +29,15 @@ def respond():
             if update.message.text and update.message.chat.id and update.message.message_id:
                 chat_id = update.message.chat.id
                 msg_id = update.message.message_id
-                text = update.message.text.encode('utf-8').decode()
+                option = update.message.text.encode('utf-8').decode()
                 print("got text message :", text)
         
         
-                if text[0] == '/':
-                    response = get_response(text)
+                if option[0] == '/':
+                    response = commands_init(option)
                     bot.sendMessage(chat_id=chat_id, text=response, reply_to_message_id=msg_id)
                 else:
-               
+               ]
                     print('does not start with /.')
             if update.message.new_chat_members is not None and len(update.message.new_chat_members) != 0: 
                 chat_id = update.message.chat.id
