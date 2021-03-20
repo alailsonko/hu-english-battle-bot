@@ -1,10 +1,12 @@
 from flask import (Flask, request)
 from mastermind.response import get_response
 import telegram
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-TOKEN = '1606387832:AAFtuOGfvPw-8ah0F8MWWPB802oLy0MrJzE'
-
-URL = "https://hu-english-battle-bot.herokuapp.com/"
+TOKEN = os.getenv('TOKEN')
+URL = os.getenv('APP_URL')
 
 bot = telegram.Bot(token=TOKEN)
 
@@ -12,22 +14,26 @@ app = Flask(__name__)
 
 
 
-@app.route('/1606387832:AAFtuOGfvPw-8ah0F8MWWPB802oLy0MrJzE'.format(TOKEN), methods=['POST'])
+@app.route('/{}'.format(TOKEN), methods=['POST'])
 def respond():
-    bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
     # retrieve the message in JSON and then transform it to Telegram object
     update = telegram.Update.de_json(request.get_json(force=True), bot)
-
-    chat_id = update.message.chat.id
-    msg_id = update.message.message_id
-
+  
     # Telegram understands UTF-8, so encode text for unicode compatibility
-    text = update.message.text.encode('utf-8').decode()
-    print("got text message :", text)
-
-    response = get_response(text)
-    bot.sendMessage(chat_id=chat_id, text=response, reply_to_message_id=msg_id)
-
+    print(update)
+    if(update.message and update.message.text and update.message.chat.id and update.message.message_id):
+        print('reaching')
+        chat_id = update.message.chat.id
+        msg_id = update.message.message_id
+        text = update.message.text.encode('utf-8').decode()
+        print("got text message :", text)
+        
+        
+        if text[0] == '/':
+            response = get_response(text)
+            bot.sendMessage(chat_id=chat_id, text=response, reply_to_message_id=msg_id)
+    else:
+        print('no message so far... still listening...')
     return 'ok'
 
 
