@@ -1,2 +1,2 @@
-def get_response(msg):
+def commands_init(msg):
     return 'workifdsfdsafsng'
