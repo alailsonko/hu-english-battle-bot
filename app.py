@@ -1,22 +1,14 @@
-from flask import (Flask, request)
+from flask import request
+from setup_app.app_init import (app, mongo) 
 from commands.manage_commands import commands_init
 from templates.welcome import welcome_msg
+from settings import TOKEN, URL
 import telegram
-import os
-from dotenv import load_dotenv
-load_dotenv()
-
-TOKEN = os.getenv('TOKEN')
-URL = os.getenv('APP_URL')
 
 bot = telegram.Bot(token=TOKEN)
 
-app = Flask(__name__)
-
-
 @app.route('/{}'.format(TOKEN), methods=['POST', 'GET'])
 def respond():
-
     # retrieve the message in JSON and then transform it to Telegram object
     if request.get_json(force=True)['update_id']:
         update = telegram.Update.de_json(request.get_json(force=True), bot)
@@ -33,7 +25,7 @@ def respond():
         
                 if option[0] == '/':
                     response = commands_init(update, option)
-                    bot.sendMessage(chat_id=chat_id, text=response, reply_to_message_id=msg_id)
+                    bot.sendMessage(chat_id=chat_id, text=response, parse_mode='HTML',reply_to_message_id=msg_id)
                 else:
                     print('does not start with /.')
 

@@ -1,9 +1,9 @@
-def start_battle_controller(update):
-    return 'with the update - {}'.format(update)
+from templates.welcome import welcome_msg
+from controllers.start_battle_controller import start_battle_controller
 
 def commands_init(update, command):
     switcher = {
         "/start-new-battle": start_battle_controller(update),
-        "/stop-battle": "u selected stop new battle",
+        "/help-english-battle": welcome_msg(),
     }
     return switcher.get(command, "Incorrect selection")
