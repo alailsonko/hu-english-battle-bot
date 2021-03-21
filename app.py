@@ -9,10 +9,10 @@ bot = telegram.Bot(token=TOKEN)
 
 @app.route('/{}'.format(TOKEN), methods=['POST', 'GET'])
 def respond():
+    requestJSON = request.get_json(force=True)
     # retrieve the message in JSON and then transform it to Telegram object
-    if request.get_json(force=True)['update_id']:
-        update = telegram.Update.de_json(request.get_json(force=True), bot)
-
+    if requestJSON['update_id']:
+        update = telegram.Update.de_json(requestJSON, bot)
     # Telegram understands UTF-8, so encode text for unicode compatibility
     # print(update)
         if update.message:
