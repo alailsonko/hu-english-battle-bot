@@ -11,7 +11,7 @@ def start_new_battle_controller(update):
     })
     if existUser is not None and existBattle is not None:
         if existBattle['battle_status'] == 'waiting':
-            return start_new_battle_template(update)
+            return start_new_battle_template(update, existBattle)
 
         if existBattle['battle_status'] == 'started':
             return 'battle already started - you are currently playing with someone'
@@ -25,6 +25,11 @@ def start_new_battle_controller(update):
                 }
             })
 
-        return start_new_battle_template(update)
+        return start_new_battle_template(update, existBattle)
     else:
-        return 'not found'
+        return """
+<b>-----------------------------------------------------------------</b>
+<i>just type /accept-battle to play against <u>{PLAYER_ONE}</u></i>
+<b>-----------------------------------------------------------------</b>
+<i>just type /stop-current-battle to cancel this battle</i>
+"""

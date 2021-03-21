@@ -1,4 +1,16 @@
-def start_new_battle_template(update):
+def start_new_battle_template(update, existBattle):
+    if existBattle is not None:
+        return """
+            <b>--------LOG_INFO <u>waiting for player_two</u>---------</b>
+            <b>    </b>
+            <strong>ENGLISH BATTLE STARTED</strong>
+            <b>-------------------------------------------</b>
+            <strong>{PLAYER_ONE} VS {PLAYER_TWO}</strong>
+<b>-----------------------------------------------------------------</b>
+<i>just type /accept-battle to play against <u>{PLAYER_ONE}</u></i>
+<b>-----------------------------------------------------------------</b>
+<i>just type /stop-current-battle to cancel this battle</i>
+        """.format(PLAYER_ONE=existBattle['player_one'], PLAYER_TWO='waiting for player two...')
     return """
             <b>--------LOG_INFO <u>waiting for player_two</u>---------</b>
             <b>    </b>
