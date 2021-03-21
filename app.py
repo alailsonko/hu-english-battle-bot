@@ -36,10 +36,10 @@ def respond():
                 for members in update.message.new_chat_members:
                     if members.username == 'HUEnglishBattle_bot':
                         print(update)
-                        existGroup = mongo.db.battles.find_one({ 'group_id': chat_id})
+                        existGroup = mongo.db.battles.find_one({ 'group_id': "{}".format(chat_id)})
                         if existGroup is None:
                             mongo.db.battles.insert_one({
-                                'group_id': chat_id,
+                                'group_id': "{}".format(chat_id),
                                 'group_type': update.message.chat.type,
                                 'group_title': update.message.chat.title,
                                 'battle_status': "stopped",
