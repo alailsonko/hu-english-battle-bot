@@ -5,9 +5,10 @@ from controllers.unregister_controller import unregister_controller
 
 def commands_init(update, command):
     switcher = {
-        "/register": register_controller(update),
-        "/unregister": unregister_controller(update),
-        "/start-new-battle": start_new_battle_controller(update),
-        "/help-english-battle": welcome_msg(),
+        "/register": register_controller,
+        "/unregister": unregister_controller,
+        "/start-new-battle": start_new_battle_controller,
+        "/help-english-battle": welcome_msg,
     }
-    return switcher.get(command, "Incorrect selection")
+    strategyCommand = switcher.get(command, "Incorrect selection")
+    return strategyCommand(update)

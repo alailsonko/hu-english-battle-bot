@@ -1,4 +1,4 @@
-def welcome_msg():
+def welcome_msg(update):
     return """
 <strong>HU ENGLISH BATTLE GAME</strong>
 <b>      </b>
