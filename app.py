@@ -35,7 +35,19 @@ def respond():
 
                 for members in update.message.new_chat_members:
                     if members.username == 'HUEnglishBattle_bot':
-                        bot.sendMessage(chat_id=chat_id, text=welcome_msg(), parse_mode='HTML')
+                        print(update)
+                        existGroup = mongo.db.battles.find_one({ 'group_id': chat_id})
+                        if existGroup is None:
+                            mongo.db.battles.insert_one({
+                                'group_id': chat_id,
+                                'group_type': update.message.chat.type,
+                                'group_title': update.message.chat.title,
+                                'battle_status': "stopped",
+                                'question_status': "5",
+                                'player_one': "None",
+                                'player_two': "None",
+                            })
+                        bot.sendMessage(chat_id=chat_id, text=welcome_msg(update), parse_mode='HTML')
                         print('breaking loop...')
 
                         break
