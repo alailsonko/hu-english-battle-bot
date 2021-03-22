@@ -13,6 +13,8 @@ def stop_current_battle_controller(update):
                 #update
                 {"$set": { 
                     'battle_status': 'stopped',
+                    'player_one': 'None',
+                    'player_two': 'None',
                     }
                 })
             print('existBattle')
