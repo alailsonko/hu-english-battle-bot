@@ -3,6 +3,7 @@ from controllers.start_new_battle_controller import start_new_battle_controller
 from controllers.stop_current_battle_controller import stop_current_battle_controller
 from controllers.register_controller import register_controller
 from controllers.unregister_controller import unregister_controller
+from controllers.accept_battle_controller import accept_battle_controller
 
 def commands_init(update, command):
     switcher = {
@@ -10,6 +11,7 @@ def commands_init(update, command):
         "/unregister": unregister_controller,
         "/start-new-battle": start_new_battle_controller,
         "/stop-current-battle": stop_current_battle_controller,
+        "/accept-battle": accept_battle_controller,
         "/help-english-battle": welcome_msg,
     }
     strategyCommand = switcher.get(command, welcome_msg)
