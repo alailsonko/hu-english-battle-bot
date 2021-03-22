@@ -26,10 +26,18 @@ def start_new_battle_controller(update):
             })
 
         return start_new_battle_template(update, existBattle)
+    # TODO make a template for this case
+    if existUser is None:
+        return """
+<b>-----------------------------------------------------------------</b>
+<i>just type /accept-battle to play against <u>{PLAYER_ONE}</u></i>
+<b>-----------------------------------------------------------------</b>
+<i>just type /stop-current-battle to cancel this battle</i>
+""".format(PLAYER_ONE=update.message.from_user.username)
     else:
         return """
 <b>-----------------------------------------------------------------</b>
 <i>just type /accept-battle to play against <u>{PLAYER_ONE}</u></i>
 <b>-----------------------------------------------------------------</b>
 <i>just type /stop-current-battle to cancel this battle</i>
-"""
+""".format(PLAYER_ONE=update.message.from_user.username)
