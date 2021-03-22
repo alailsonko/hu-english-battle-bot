@@ -17,8 +17,8 @@ def accept_battle_controller(update):
                     'player_two': "{}".format(update.message.from_user.username)
                     }
                 })
-            return '{} - accepted the battle'.format(update.message.from_user.username)
+            return '{} - accepted the battle2'.format(update.message.from_user.username)
         if existBattle['battle_status'] == 'started':
-            return 'wait the battle finish'
+            return '{} - accepted the battle'.format(update.message.from_user.username)
         if existBattle['battle_status'] == 'stopped':
             return 'has no battle waiting for a player, start a new one'
