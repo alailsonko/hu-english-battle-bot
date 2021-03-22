@@ -5,6 +5,28 @@ from templates.welcome import welcome_msg
 from settings import TOKEN, URL
 import telegram
 
+@app.route('/create-question', methods=['POST', 'GET'])
+def create_question():
+    requestJSON = request.get_json(force=True)
+    if (requestJSON['question'] is not None and \
+       requestJSON['answer'] is not None and \
+       requestJSON['option1'] is not None and \
+       requestJSON['option2'] is not None and \
+       requestJSON['option3'] is not None and \
+       requestJSON['option4'] is not None):
+        
+        mongo.db.questions.insert_one({
+            'question': requestJSON['question'],
+            'answer': requestJSON['answer'],
+            'option1': requestJSON['option1'],
+            'option2': requestJSON['option2'],
+            'option3': requestJSON['option3'],
+            'option4': requestJSON['option4'],
+        })
+        return 'ok'
+    else:
+        return 'something is missing'
+
 @app.route('/{}'.format(TOKEN), methods=['POST', 'GET'])
 def respond():
     requestJSON = request.get_json(force=True)
@@ -24,6 +46,11 @@ def respond():
                 if option[0] == '/':
                     response = commands_init(update, option)
                     bot.sendMessage(chat_id=chat_id, text=response, parse_mode='HTML',reply_to_message_id=msg_id)
+                    existBattle = mongo.db.battles.find_one({
+                            'group_id': "{}".format(update.message.chat.id),
+                        })
+                    if existBattle['battle_status'] == 'started' and existBattle['question_status'] == '0':
+                        commands_init(update, '/q')
                 else:
                     print('does not start with /.')
 
