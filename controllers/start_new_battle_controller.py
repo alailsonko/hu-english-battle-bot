@@ -15,7 +15,7 @@ def start_new_battle_controller(update):
 
         if existBattle['battle_status'] == 'started':
             return 'battle already started - you are currently playing with someone'
-        result = mongo.db.battles.update_one(
+        mongo.db.battles.update_one(
             #find
             {'_id': existBattle['_id']}, 
             #update
@@ -24,7 +24,9 @@ def start_new_battle_controller(update):
                 'player_one': "{}".format(update.message.from_user.username)
                 }
             })
-
+        existBattle = mongo.db.battles.find_one({
+            'group_id': "{}".format(update.message.chat.id),
+        })
         return start_new_battle_template(update, existBattle)
     # TODO make a template for this case
     if existUser is None:

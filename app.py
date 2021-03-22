@@ -1,11 +1,9 @@
 from flask import request
-from setup_app.app_init import (app, mongo) 
+from setup_app.app_init import (app, mongo, bot) 
 from commands.manage_commands import commands_init
 from templates.welcome import welcome_msg
 from settings import TOKEN, URL
 import telegram
-
-bot = telegram.Bot(token=TOKEN)
 
 @app.route('/{}'.format(TOKEN), methods=['POST', 'GET'])
 def respond():
