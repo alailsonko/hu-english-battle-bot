@@ -43,9 +43,12 @@ def respond():
                                 'group_type': update.message.chat.type,
                                 'group_title': update.message.chat.title,
                                 'battle_status': "stopped",
-                                'question_status': "5",
+                                'question_status': "0",
+                                'question_quantity': "6",
                                 'player_one': "None",
+                                'player_one_score': "0",
                                 'player_two': "None",
+                                'player_two_score': "0",
                             })
                         bot.sendMessage(chat_id=chat_id, text=welcome_msg(update), parse_mode='HTML')
                         print('breaking loop...')

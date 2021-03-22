@@ -8,3 +8,6 @@ def unregister_controller(update):
     if existUser is not None:
         mongo.db.users.delete_one({'_id': findUser['_id']})
         return '{} - unregistered successfully'.format(update.message.from_user.username)
+    # TODO make a template for this case
+    else:
+        return 'user exist'
